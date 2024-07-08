@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GeminiUnifiedReview</string>
+    <string name="capture_image">Capture Image</string>
+    <string name="captured">captured</string>
+    <string name="import_image">Import Image</string>
+    <string name="trigger_function">Trigger Function</string>
+</resources>
