@@ -2,6 +2,7 @@ package com.example.geminiunifiedreview
 
 import android.content.ContentValues
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -19,6 +20,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import java.io.File
 import java.io.IOException
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.content
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import android.util.Log
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         val bitmap = uriToBitmap(imageUrl)
         captureIV.setImageBitmap(bitmap)
         triggerFunctionBtn.visibility = Button.VISIBLE
-        updateLayout()
     }
 
     private val selectImageContract = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -42,7 +48,6 @@ class MainActivity : AppCompatActivity() {
             val bitmap = uriToBitmap(uri)
             captureIV.setImageBitmap(bitmap)
             triggerFunctionBtn.visibility = Button.VISIBLE
-            updateLayout()
         }
     }
 
@@ -101,25 +106,60 @@ class MainActivity : AppCompatActivity() {
 
     private fun triggerFunction() {
         // Placeholder function
-//        println("Trigger function executed.")
-        Toast.makeText(this, "Trigger!!.", Toast.LENGTH_SHORT).show()
+        println("Trigger function executed.")
+//        Toast.makeText(this, "Trigger!!.", Toast.LENGTH_SHORT).show()
 
+        val model = GenerativeModel(
+            "gemini-1.0-pro-vision-latest",
+            "AIzaSyCMNKgS52h40uEoFkBHptuCdV8ZAEwJ-M8"
+        )
+
+        val bitmap = (captureIV.drawable as? BitmapDrawable)?.bitmap
+
+        if (bitmap == null) {
+            showToastWithLongMessage("Failed to get bitmap from ImageView.")
+            return
+        }
+
+        val input = content {
+            text("From the given image, can you tell me which product is it and also mention what rating it has in amazon out of 5. you can mention in this structure. Product: the product name\n Amazon Rating: value out of 5 \n Pros: 2-3 pros\n Cons: 2-3 cons if any?\n")
+            image(bitmap)
+        }
+
+        // Launch a coroutine to call the suspend function
+        lifecycleScope.launch {
+            try {
+                val response = model.generateContent(input)
+
+                // Get the first text part of the first candidate
+                println(response.text)
+                val resp = response.text
+                Log.d("SuccessActivity", "worked, $resp")
+                println(response.candidates.first().content.parts.first().toString())
+                Toast.makeText(applicationContext, "$resp", Toast.LENGTH_SHORT).show()
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.e("MainActivity", "Error during content generation", e)
+                showToastWithLongMessage("Error: ${e.message}")
+            }
+        }
     }
 
-    private fun updateLayout() {
-        captureIV.visibility = ImageView.VISIBLE
-
-        val constraintLayout = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.main)
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(constraintLayout)
-
-        constraintSet.clear(R.id.captureImageButton, ConstraintSet.TOP)
-        constraintSet.clear(R.id.importImageButton, ConstraintSet.TOP)
-        constraintSet.connect(R.id.captureImageButton, ConstraintSet.TOP, R.id.captureImageView, ConstraintSet.BOTTOM)
-        constraintSet.connect(R.id.importImageButton, ConstraintSet.TOP, R.id.captureImageButton, ConstraintSet.BOTTOM)
-
-        constraintSet.applyTo(constraintLayout)
+    private fun showToastWithLongMessage(message: String) {
+        val maxToastLength = 2000 // Maximum length for a single Toast message
+        if (message.length > maxToastLength) {
+            val chunkCount = message.length / maxToastLength
+            for (i in 0..chunkCount) {
+                val start = i * maxToastLength
+                val end = if ((i + 1) * maxToastLength > message.length) message.length else (i + 1) * maxToastLength
+                Toast.makeText(this, message.substring(start, end), Toast.LENGTH_LONG).show()
+            }
+        } else {
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        }
     }
+
 
 
 }
