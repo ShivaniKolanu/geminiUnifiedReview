@@ -4,4 +4,5 @@
     <string name="captured">captured</string>
     <string name="import_image">Import Image</string>
     <string name="trigger_function">Trigger Function</string>
+    <string name="geminsight">GemInsight</string>
 </resources>

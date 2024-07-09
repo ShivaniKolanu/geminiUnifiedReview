@@ -5,55 +5,96 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F5F5"
     tools:context=".MainActivity">
 
+    <!-- Container for title and icon -->
+    <LinearLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#009688"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!-- Tag for showing the captured image frame   -->
+        <!-- Icon -->
+        <ImageView
+            android:id="@+id/appIcon"
+            android:layout_width="45dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="imageViewTitle"
+            android:src="@drawable/geminsight_icon"
+
+            />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:text="@string/geminsight"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp" />
+
+    </LinearLayout>
+
+    <!-- ImageView for showing the captured image frame -->
     <ImageView
         android:id="@+id/captureImageView"
         android:layout_width="300dp"
         android:layout_height="350dp"
+        android:layout_marginTop="16dp"
         android:contentDescription="@string/captured"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/image_background"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toBottomOf="@+id/titleLayout"
+        app:layout_constraintBottom_toTopOf="@+id/captureImageButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Tag for creating a button to capture image   -->
-
-    <!-- Tag for creating a button to import image from gallery   -->
+    <!-- Button to capture image -->
     <Button
         android:id="@+id/captureImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:backgroundTint="#009688"
         android:text="@string/capture_image"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/captureImageView"
-        app:layout_constraintVertical_bias="0.094" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- Button to import image from gallery -->
     <Button
         android:id="@+id/importImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:backgroundTint="#009688"
         android:text="@string/import_image"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@+id/captureImageButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/captureImageButton"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- New Button to trigger function after image is captured or imported -->
+    <!-- Button to trigger function after image is captured or imported -->
     <Button
         android:id="@+id/triggerFunctionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:visibility="gone"
         android:backgroundTint="#FF5722"
-        android:text="@string/trigger_function"
+        android:text="Search for Reviews"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/importImageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
