@@ -28,7 +28,9 @@ import kotlinx.coroutines.launch
 import android.util.Log
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 
 class MainActivity : AppCompatActivity() {
 
@@ -85,7 +87,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         triggerFunctionBtn.setOnClickListener {
-            triggerFunction()
+            if (isNetworkConnected()) {
+                triggerFunction()
+            } else {
+                showNetworkError()
+            }
         }
     }
 
@@ -165,6 +171,32 @@ class MainActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         }
+    }
+
+    // Utility method to check network connectivity
+    private fun isNetworkConnected(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+            return when {
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                else -> false
+            }
+        } else {
+            @Suppress("DEPRECATION")
+            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
+    }
+
+    private fun showNetworkError() {
+        Toast.makeText(this, "No internet connection.\nPlease check your network settings.", Toast.LENGTH_LONG).show()
+        Log.e("NetworkActivity", "No Internet Connection")
+        // val intent = Intent(this, ErrorActivity::class.java)
+        // startActivity(intent)
     }
 
 

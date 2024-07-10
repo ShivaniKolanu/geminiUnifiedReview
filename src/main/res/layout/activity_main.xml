@@ -63,8 +63,9 @@
     <!-- Info icon and message when no image is captured or imported -->
     <LinearLayout
         android:id="@+id/placeholderLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="visible"
@@ -75,8 +76,8 @@
 
         <ImageView
             android:id="@+id/infoIcon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="100dp"
+            android:layout_height="150dp"
             android:layout_marginBottom="8dp"
             android:src="@drawable/info_icon"
             android:contentDescription="info icon" />
@@ -85,9 +86,9 @@
             android:id="@+id/infoMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Please capture or import the image"
+            android:text="Please capture or import the image."
             android:textColor="#757575"
-            android:textSize="17sp"
+            android:textSize="19sp"
             android:textStyle="italic"/>
     </LinearLayout>
 
@@ -96,7 +97,7 @@
         android:id="@+id/captureImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="18dp"
         android:backgroundTint="#009688"
         android:text="@string/capture_image"
         android:textColor="#FFFFFF"
