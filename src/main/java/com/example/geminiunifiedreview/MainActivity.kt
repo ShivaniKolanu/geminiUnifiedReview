@@ -25,6 +25,7 @@ import com.google.ai.client.generativeai.type.content
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import android.util.Log
+import android.widget.LinearLayout
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var captureIV : ImageView
     private lateinit var imageUrl : Uri
     private lateinit var triggerFunctionBtn: Button
+    private lateinit var placeholderLayout: LinearLayout
+
 
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
 //
@@ -40,6 +43,8 @@ class MainActivity : AppCompatActivity() {
         val bitmap = uriToBitmap(imageUrl)
         captureIV.setImageBitmap(bitmap)
         triggerFunctionBtn.visibility = Button.VISIBLE
+        captureIV.visibility = ImageView.VISIBLE
+        placeholderLayout.visibility = LinearLayout.GONE
     }
 
     private val selectImageContract = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -48,6 +53,8 @@ class MainActivity : AppCompatActivity() {
             val bitmap = uriToBitmap(uri)
             captureIV.setImageBitmap(bitmap)
             triggerFunctionBtn.visibility = Button.VISIBLE
+            captureIV.visibility = ImageView.VISIBLE
+            placeholderLayout.visibility = LinearLayout.GONE
         }
     }
 
@@ -63,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         imageUrl = createImageUri()
         captureIV = findViewById(R.id.captureImageView)
         triggerFunctionBtn = findViewById(R.id.triggerFunctionButton)
+        placeholderLayout = findViewById(R.id.placeholderLayout)
 
         val captureImgBtn = findViewById<Button>(R.id.captureImageButton)
         captureImgBtn.setOnClickListener{
