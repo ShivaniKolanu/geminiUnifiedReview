@@ -1,6 +1,7 @@
 package com.example.geminiunifiedreview
 
 import android.content.ContentValues
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.ImageDecoder
@@ -26,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import android.util.Log
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,9 +39,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
-//
-//        captureIV.setImageURI(null)
-//        captureIV.setImageURI(imageUrl)
+
         val bitmap = uriToBitmap(imageUrl)
         captureIV.setImageBitmap(bitmap)
         triggerFunctionBtn.visibility = Button.VISIBLE
@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
 
     private val selectImageContract = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
         if (uri != null) {
-//            captureIV.setImageURI(uri)
             val bitmap = uriToBitmap(uri)
             captureIV.setImageBitmap(bitmap)
             triggerFunctionBtn.visibility = Button.VISIBLE
@@ -59,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        window.statusBarColor = ContextCompat.getColor(this, R.color.ic_launcher_background)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -113,9 +113,6 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun triggerFunction() {
-        // Placeholder function
-        println("Trigger function executed.")
-//        Toast.makeText(this, "Trigger!!.", Toast.LENGTH_SHORT).show()
 
         val model = GenerativeModel(
             "gemini-1.0-pro-vision-latest",
@@ -130,21 +127,23 @@ class MainActivity : AppCompatActivity() {
         }
 
         val input = content {
-            text("From the given image, can you tell me which product is it and also mention what rating it has in amazon out of 5. you can mention in this structure. Product: the product name\n Amazon Rating: value out of 5 \n Pros: 2-3 pros\n Cons: 2-3 cons if any?\n")
+            text("From the given image, can you tell me which product is it and also mention what rating it has in amazon and any other 3 relevant websites out of 5. you can mention in this structure. Product: the product name\n Amazon Rating: value out of 5 \n Name of website - Rating: value out of 5\n Name of website - Rating: value out of 5\n Name of website - Rating: value out of 5\n  Pros: 2-3 pros\n Cons: 2-3 cons if any?\n")
             image(bitmap)
         }
+
+        val intent = Intent(this, LoadingActivity::class.java)
+        startActivity(intent)
 
         // Launch a coroutine to call the suspend function
         lifecycleScope.launch {
             try {
                 val response = model.generateContent(input)
 
-                // Get the first text part of the first candidate
-                println(response.text)
                 val resp = response.text
                 Log.d("SuccessActivity", "worked, $resp")
-                println(response.candidates.first().content.parts.first().toString())
-                Toast.makeText(applicationContext, "$resp", Toast.LENGTH_SHORT).show()
+                val intent_1 = Intent(this@MainActivity, ResponseActivity::class.java)
+                intent_1.putExtra("response", resp)
+                startActivity(intent_1)
 
             } catch (e: Exception) {
                 e.printStackTrace()
