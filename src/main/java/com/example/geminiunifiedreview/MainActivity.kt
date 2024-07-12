@@ -31,6 +31,9 @@ import androidx.core.content.ContextCompat
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Handler
+import android.os.Looper
+import android.view.MotionEvent
 
 class MainActivity : AppCompatActivity() {
 
@@ -73,6 +76,12 @@ class MainActivity : AppCompatActivity() {
         captureIV = findViewById(R.id.captureImageView)
         triggerFunctionBtn = findViewById(R.id.triggerFunctionButton)
         placeholderLayout = findViewById(R.id.placeholderLayout)
+        val saveIcon: ImageView = findViewById(R.id.saveIcon)
+
+
+        saveIcon.setOnClickListener {
+            showSavedFunction()
+        }
 
         val captureImgBtn = findViewById<Button>(R.id.captureImageButton)
         captureImgBtn.setOnClickListener{
@@ -115,6 +124,24 @@ class MainActivity : AppCompatActivity() {
             null
         }
     }
+
+    private fun showSavedFunction() {
+        Log.d("SavedClickActivity", "Saved Click Happened")
+        // Start LoadingActivity
+        val intent = Intent(this, LoadingActivity::class.java)
+        startActivity(intent)
+        startActivity(intent)
+
+        // Delay of 2 seconds before starting ResponseActivity
+        Handler(Looper.getMainLooper()).postDelayed({
+            // Start ResponseActivity
+            val responseIntent = Intent(this, SavedSearchesActivity::class.java)
+            startActivity(responseIntent)
+            finish()
+        }, 2000) // 2000 milliseconds = 2 seconds
+    }
+
+
 
 
 

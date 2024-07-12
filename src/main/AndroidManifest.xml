@@ -36,6 +36,11 @@
             android:exported="true">
 
         </activity>
+
+        <activity android:name=".SavedSearchesActivity"
+            android:exported="true">
+
+        </activity>
         <provider
             android:authorities="com.example.geminiunifiedreview.FileProvider"
             android:name="androidx.core.content.FileProvider"
