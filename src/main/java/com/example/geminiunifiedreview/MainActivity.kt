@@ -130,7 +130,6 @@ class MainActivity : AppCompatActivity() {
         // Start LoadingActivity
         val intent = Intent(this, LoadingActivity::class.java)
         startActivity(intent)
-        startActivity(intent)
 
         // Delay of 2 seconds before starting ResponseActivity
         Handler(Looper.getMainLooper()).postDelayed({
