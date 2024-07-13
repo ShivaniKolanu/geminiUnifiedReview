@@ -34,6 +34,8 @@ import android.net.NetworkCapabilities
 import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
+import java.io.ByteArrayOutputStream
+import java.util.Properties
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +43,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imageUrl : Uri
     private lateinit var triggerFunctionBtn: Button
     private lateinit var placeholderLayout: LinearLayout
+    private var isCapturedImage = false
+
+    object ImageHolder {
+        var bitmap: Bitmap? = null
+    }
 
 
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
@@ -78,13 +85,13 @@ class MainActivity : AppCompatActivity() {
         placeholderLayout = findViewById(R.id.placeholderLayout)
         val saveIcon: ImageView = findViewById(R.id.saveIcon)
 
-
         saveIcon.setOnClickListener {
             showSavedFunction()
         }
 
         val captureImgBtn = findViewById<Button>(R.id.captureImageButton)
         captureImgBtn.setOnClickListener{
+            isCapturedImage = true
             imageUrl = createImageUri() // Update image URI each time before capturing
             contract.launch(imageUrl)
 
@@ -92,6 +99,7 @@ class MainActivity : AppCompatActivity() {
 
         val importImgBtn = findViewById<Button>(R.id.importImageButton)
         importImgBtn.setOnClickListener {
+            isCapturedImage = false
             selectImageContract.launch(arrayOf("image/*"))
         }
 
@@ -127,28 +135,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun showSavedFunction() {
         Log.d("SavedClickActivity", "Saved Click Happened")
-        // Start LoadingActivity
         val intent = Intent(this, LoadingActivity::class.java)
         startActivity(intent)
 
-        // Delay of 2 seconds before starting ResponseActivity
         Handler(Looper.getMainLooper()).postDelayed({
-            // Start ResponseActivity
             val responseIntent = Intent(this, SavedSearchesActivity::class.java)
             startActivity(responseIntent)
             finish()
-        }, 2000) // 2000 milliseconds = 2 seconds
+        }, 2000)
     }
-
-
-
 
 
     private fun triggerFunction() {
 
+        val config = loadConfig(this)
+        val gemini_api_key = config.getProperty("GEMINI_API_KEY")
+
+        Log.d("APIActivity", "working, $gemini_api_key")
+
         val model = GenerativeModel(
             "gemini-1.0-pro-vision-latest",
-            "AIzaSyCMNKgS52h40uEoFkBHptuCdV8ZAEwJ-M8"
+            gemini_api_key
         )
 
         val bitmap = (captureIV.drawable as? BitmapDrawable)?.bitmap
@@ -170,11 +177,13 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val response = model.generateContent(input)
-
+                val byteImage = bitmapToByteArray(bitmap)
                 val resp = response.text
                 Log.d("SuccessActivity", "worked, $resp")
                 val intent_1 = Intent(this@MainActivity, ResponseActivity::class.java)
                 intent_1.putExtra("response", resp)
+                ImageHolder.bitmap = bitmap
+                intent_1.putExtra("isCapturedImage", isCapturedImage)
                 startActivity(intent_1)
 
             } catch (e: Exception) {
@@ -221,10 +230,23 @@ class MainActivity : AppCompatActivity() {
     private fun showNetworkError() {
         Toast.makeText(this, "No internet connection.\nPlease check your network settings.", Toast.LENGTH_LONG).show()
         Log.e("NetworkActivity", "No Internet Connection")
-        // val intent = Intent(this, ErrorActivity::class.java)
-        // startActivity(intent)
+
     }
 
+    private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        return stream.toByteArray()
+    }
 
-
+    private fun loadConfig(context: Context): Properties {
+        val properties = Properties()
+        try {
+            val inputStream = context.assets.open("config.properties")
+            properties.load(inputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return properties
+    }
 }

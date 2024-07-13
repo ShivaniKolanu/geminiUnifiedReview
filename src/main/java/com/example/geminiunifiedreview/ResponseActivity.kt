@@ -1,11 +1,14 @@
 package com.example.geminiunifiedreview
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import java.io.File
 
 class ResponseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,7 +18,13 @@ class ResponseActivity : AppCompatActivity() {
 
         val responseTextView: TextView = findViewById(R.id.responseTextView)
         val response = intent.getStringExtra("response")
+        val responseIV: ImageView = findViewById(R.id.responseImageView)
+        val isCapturedImage = intent.getBooleanExtra("isCapturedImage", true)
 
+        val bitmap = MainActivity.ImageHolder.bitmap
+        if (bitmap != null) {
+            responseIV.setImageBitmap(bitmap)
+        }
         if (response != null) {
             responseTextView.text = response
         }
