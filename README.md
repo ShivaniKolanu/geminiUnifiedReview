@@ -26,7 +26,6 @@
 - __Android Studio:__ The integrated development environment (IDE) for building the app.
 - __Google Gemini API:__ For retrieving product information and reviews.
 - __XML:__ For designing the user interface.
-- __Retrofit:__ For handling API requests and responses.
 
 ### 📱Why Kotlin?
 
