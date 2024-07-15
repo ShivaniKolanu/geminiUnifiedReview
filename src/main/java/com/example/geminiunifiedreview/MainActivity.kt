@@ -35,7 +35,10 @@ import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
 import java.io.ByteArrayOutputStream
+import java.util.Dictionary
 import java.util.Properties
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,6 +51,19 @@ class MainActivity : AppCompatActivity() {
     object ImageHolder {
         var bitmap: Bitmap? = null
     }
+
+    data class Rating(
+        val website: String,
+        val rating: String
+    )
+
+    data class ProductResponse(
+        val product: String,
+        val ratings: Map<String, String>,
+        val pros: List<String>,
+        val cons: List<String>
+    )
+
 
 
     private val contract = registerForActivityResult(ActivityResultContracts.TakePicture()){
@@ -165,8 +181,27 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+
         val input = content {
-            text("From the given image, can you tell me which product is it and also mention what rating it has in amazon and any other 3 relevant websites out of 5. you can mention in this structure. Product: the product name\n Amazon Rating: value out of 5 \n Name of website - Rating: value out of 5\n Name of website - Rating: value out of 5\n Name of website - Rating: value out of 5\n  Pros: 2-3 pros\n Cons: 2-3 cons if any?\n")
+            text("From the given image, can you tell me which product is it and also mention " +
+                    "what rating it has in amazon and any other 3 relevant websites out of 5. " +
+                    "Product: the product name\n " +
+                    "Amazon Rating: value out of 5 \n Name of website - Rating: value out of 5\n " +
+                    "Name of website - Rating: value out of 5\n Name of website - Rating: value out of 5\n  " +
+                    "Pros: 2-3 pros\n Cons: 2-3 c   ons if any?\n the structure i want is as below\n" +
+                    "{\n" +
+                    "  \"product\": \"product name\",\n" +
+                    "  \"ratings\": {\n" +
+                    "    \"website1\": \"rating you found in the website/out of how much is the rating\",\n" +
+                    "    \"website2\": \"rating you found in the website/out of how much is the rating\",\n" +
+                    "    \"website3\": \"rating you found in the website/out of how much is the rating\"\n" +
+                    "    \"website4\": \"rating you found in the website/out of how much is the rating\"\n" +
+                    "  },\n" +
+                    "  \"pros\": [\"point1\", \"point2\"],\n" +
+                    "  \"cons\": [\"point1\", \"point2\"]\n" +
+                    "}\n"
+
+            )
             image(bitmap)
         }
 
@@ -180,8 +215,19 @@ class MainActivity : AppCompatActivity() {
                 val byteImage = bitmapToByteArray(bitmap)
                 val resp = response.text
                 Log.d("SuccessActivity", "worked, $resp")
+
+                // Parse the JSON response
+                val gson = Gson()
+                val productResponse: ProductResponse = gson.fromJson(resp, object : TypeToken<ProductResponse>() {}.type)
+
+                // Convert the productResponse to JSON string
+                val productResponseJson = gson.toJson(productResponse)
+
+                Log.d("SuccessActivity", "worked, $productResponseJson")
+
                 val intent_1 = Intent(this@MainActivity, ResponseActivity::class.java)
                 intent_1.putExtra("response", resp)
+                intent_1.putExtra("productResponse", productResponseJson)
                 ImageHolder.bitmap = bitmap
                 intent_1.putExtra("isCapturedImage", isCapturedImage)
                 startActivity(intent_1)

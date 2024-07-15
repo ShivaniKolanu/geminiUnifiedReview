@@ -49,5 +49,6 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     implementation ("com.jpardogo.googleprogressbar:library:1.2.0")
+    implementation ("com.google.code.gson:gson:2.8.8")
 
 }

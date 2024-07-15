@@ -28,4 +28,12 @@ class SavedSearchesActivity : AppCompatActivity() {
             finish()
         }
     }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        // Optional: Clear the back stack to ensure no previous activities remain
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish() // Call this if you want to finish the current activity
+    }
 }

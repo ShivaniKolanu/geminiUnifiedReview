@@ -43,6 +43,21 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/responseTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Screen under progress..."
+        android:textColor="#000000"
+        android:textColorLink="#009688"
+        android:layout_marginTop="50dp"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/titleLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <Button
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
