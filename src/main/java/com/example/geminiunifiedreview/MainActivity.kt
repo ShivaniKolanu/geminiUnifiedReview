@@ -170,7 +170,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("APIActivity", "working, $gemini_api_key")
 
         val model = GenerativeModel(
-            "gemini-1.0-pro-vision-latest",
+            "gemini-1.5-flash",
             gemini_api_key
         )
 
