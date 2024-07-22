@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imageUrl : Uri
     private lateinit var triggerFunctionBtn: Button
     private lateinit var placeholderLayout: LinearLayout
+    private lateinit var triggerComparingProductsBtn: Button
     private var isCapturedImage = false
 
     object ImageHolder {
@@ -73,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         triggerFunctionBtn.visibility = Button.VISIBLE
         captureIV.visibility = ImageView.VISIBLE
         placeholderLayout.visibility = LinearLayout.GONE
+        triggerComparingProductsBtn.visibility = Button.GONE
     }
 
     private val selectImageContract = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -82,6 +84,7 @@ class MainActivity : AppCompatActivity() {
             triggerFunctionBtn.visibility = Button.VISIBLE
             captureIV.visibility = ImageView.VISIBLE
             placeholderLayout.visibility = LinearLayout.GONE
+            triggerComparingProductsBtn.visibility = Button.GONE
         }
     }
 
@@ -99,6 +102,7 @@ class MainActivity : AppCompatActivity() {
         captureIV = findViewById(R.id.captureImageView)
         triggerFunctionBtn = findViewById(R.id.triggerFunctionButton)
         placeholderLayout = findViewById(R.id.placeholderLayout)
+        triggerComparingProductsBtn = findViewById((R.id.compareProductsButton))
         val saveIcon: ImageView = findViewById(R.id.saveIcon)
 
         saveIcon.setOnClickListener {
@@ -125,6 +129,12 @@ class MainActivity : AppCompatActivity() {
             } else {
                 showNetworkError()
             }
+        }
+
+        triggerComparingProductsBtn.setOnClickListener{
+
+            compareProductsFunction()
+
         }
     }
 
@@ -156,6 +166,18 @@ class MainActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             val responseIntent = Intent(this, SavedSearchesActivity::class.java)
+            startActivity(responseIntent)
+            finish()
+        }, 2000)
+    }
+
+    private fun compareProductsFunction() {
+        Log.d("CompareProductsActivity", "Compare Products Click Happened")
+        val intent = Intent(this, LoadingActivity::class.java)
+        startActivity(intent)
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            val responseIntent = Intent(this, CompareProductsActivity::class.java)
             startActivity(responseIntent)
             finish()
         }, 2000)
