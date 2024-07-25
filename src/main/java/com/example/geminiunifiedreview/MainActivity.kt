@@ -173,14 +173,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun compareProductsFunction() {
         Log.d("CompareProductsActivity", "Compare Products Click Happened")
-        val intent = Intent(this, LoadingActivity::class.java)
+        val intent = Intent(this, CompareProductsActivity::class.java)
         startActivity(intent)
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            val responseIntent = Intent(this, CompareProductsActivity::class.java)
-            startActivity(responseIntent)
-            finish()
-        }, 2000)
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            val responseIntent = Intent(this, CompareProductsActivity::class.java)
+//            startActivity(responseIntent)
+//            finish()
+//        }, 1000)
     }
 
 

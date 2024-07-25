@@ -4,5 +4,11 @@
     <files-path
         name="camera_photos"
         path="."/>
+    <files-path
+        name="compare_photo_1"
+        path="."/>
+    <files-path
+        name="compare_photo_2"
+        path="."/>
 
 </paths>
