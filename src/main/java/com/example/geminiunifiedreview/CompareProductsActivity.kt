@@ -61,6 +61,24 @@ class CompareProductsActivity : AppCompatActivity() {
         placeholderLayout2.visibility = LinearLayout.GONE
     }
 
+    private val selectImageContract = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        if (uri != null) {
+            val bitmap = uriToBitmap(uri)
+            captureIV1.setImageBitmap(bitmap)
+            captureIV1.visibility = ImageView.VISIBLE
+            placeholderLayout1.visibility = LinearLayout.GONE
+        }
+    }
+
+    private val selectImageContract2 = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        if (uri != null) {
+            val bitmap = uriToBitmap(uri)
+            captureIV2.setImageBitmap(bitmap)
+            captureIV2.visibility = ImageView.VISIBLE
+            placeholderLayout2.visibility = LinearLayout.GONE
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         window.statusBarColor = ContextCompat.getColor(this, R.color.ic_launcher_background)
         super.onCreate(savedInstanceState)
@@ -90,6 +108,18 @@ class CompareProductsActivity : AppCompatActivity() {
             imageUrl2 = createImageUri(2)
             contract2.launch(imageUrl2)
         }
+
+        val importImgBtn1: ImageView = findViewById(R.id.importImageButton1)
+        importImgBtn1.setOnClickListener{
+            selectImageContract.launch(arrayOf("image/*"))
+        }
+
+        val importImgBtn2: ImageView = findViewById(R.id.importImageButton2)
+        importImgBtn2.setOnClickListener{
+            selectImageContract2.launch(arrayOf("image/*"))
+        }
+
+
 
         compareFunBtn.setOnClickListener{
             if (isNetworkConnected()) {
