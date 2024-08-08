@@ -1,4 +1,4 @@
-# ✨ Gemini Unified Review ✨ <img width="50" height="50" alt="image" src="https://github.com/user-attachments/assets/fed7a9a6-12f0-4e63-9623-fb1a2ddcc850">
+# ✨ GemInsight - Gemini Unified Review ✨ <img width="50" height="50" alt="image" src="https://github.com/user-attachments/assets/fed7a9a6-12f0-4e63-9623-fb1a2ddcc850">
 
 ### 📱Abstract 
 - The app is designed to streamline the process of gathering product ratings and reviews by consolidating information from multiple sources. 
