@@ -34,3 +34,11 @@ Kotlin is a modern, statically-typed programming language that is fully interope
 ### 📱Conclusion 
 
 My app aims to revolutionize the way consumers access product reviews and ratings by providing a unified platform for aggregated information. With the power of Kotlin and the Google Gemini API, we ensure a robust, efficient, and user-friendly application that meets the modern consumer's needs.
+
+
+### 📱 Demo
+
+
+[![Demo](https://img.youtube.com/vi/NJk_NsD-xpk/0.jpg)](https://youtu.be/NJk_NsD-xpk)
+
+
